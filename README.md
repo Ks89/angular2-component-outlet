@@ -1,4 +1,4 @@
-# angular2-component-outlet
+# angular2-component-outlet (modified with templateUrl)
 
 ```
 $ npm install --save angular2-component-outlet
@@ -12,17 +12,14 @@ Example:
 @Component({
   selector: 'my-app',
   template: `
-    <div *componentOutlet="template; context: self; selector:'my-component'"></div>
+    <div *componentOutlet="templateUrlVar; context: self; selector:'my-component'"></div>
   `,
   directives: [ComponentOutlet]
 })
 export class AppComponent {
   self = this;
 
-  template = `
-  <div>
-    <p>Dynamic Component</p>
-  </div>`;
+  templateUrlVar = 'path/to/your/htmlFile.html';
 }
 ```
 
@@ -32,7 +29,7 @@ Result:
 <my-app>
     <my-component>
         <div>
-            <p>Dynamic Component</p>
+             HTML file's content
         </div>
     </my-component>
 </my-app>
