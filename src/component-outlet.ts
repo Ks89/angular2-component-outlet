@@ -17,17 +17,13 @@ import {
  * @Component({
  *   selector: 'my-app',
  *   template: `
- *     <div *componentOutlet="template; context: self; selector:'my-component'"></div>
+ *     <div *componentOutlet="templateUrlVar; context: self; selector:'my-component'"></div>
  *   `,
  *   directives: [ComponentOutlet]
  * })
  * export class AppComponent {
  *   self = this;
- * 
- *   template = `
- *   <div>
- *     <p>Dynamic Component</p>
- *   </div>`;
+ *   templateUrlVar = 'path/to/your/htmlFile.html';
  * }
  * ```
  * 
@@ -36,7 +32,7 @@ import {
  * ```html
  * <my-component>
  *    <div>
- *      <p>Dynamic Component</p>
+ *      HTML content
  *    </div>
  * </my-component>
  * ```
@@ -46,7 +42,7 @@ import {
   selector: '[componentOutlet]',
 })
 export class ComponentOutlet {
-  @Input('componentOutlet') private template: string;
+  @Input('componentOutlet') private templateUrl: string;
   @Input('componentOutletSelector') private selector: string;
   @Input('componentOutletContext') private context: Object;
 
@@ -57,7 +53,7 @@ export class ComponentOutlet {
 
     const metadata = new ComponentMetadata({
       selector: this.selector,
-      template: this.template,
+      templateUrl: this.templateUrl,
     });
 
     const cmpClass = class _ { };
@@ -66,7 +62,7 @@ export class ComponentOutlet {
   }
 
   ngOnChanges() {
-    if (!this.template) return;
+    if (!this.templateUrl) return;
     this.compiler.compileComponentAsync(this._createDynamicComponent())
       .then(factory => {
         const injector = ReflectiveInjector.fromResolvedProviders([], this.vcRef.parentInjector);
